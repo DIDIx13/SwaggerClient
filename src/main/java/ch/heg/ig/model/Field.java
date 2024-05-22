@@ -1,12 +1,20 @@
 package ch.heg.ig.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Field {
+    @JsonProperty("DefFieldID")
     private int defFieldID;
+    @JsonProperty("Title")
     private String title;
+    @JsonProperty("Type")
     private int type;
+    @JsonProperty("Code")
     private String code;
+    @JsonProperty("Value")
     private String value;
 
     // Constructeur

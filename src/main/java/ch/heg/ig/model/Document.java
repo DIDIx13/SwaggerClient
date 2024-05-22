@@ -1,13 +1,21 @@
 package ch.heg.ig.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Document {
+    @JsonProperty("ObjectID")
     private int objectID;
+    @JsonProperty("ContentType")
     private String contentType;
+    @JsonProperty("CreationDate")
     private String creationDate;
+    @JsonProperty("Author")
     private String author;
+    @JsonProperty("Fields")
     private List<Field> fields;
 
     // Constructeur
