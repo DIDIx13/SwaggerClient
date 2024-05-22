@@ -24,14 +24,12 @@ public class ApiClient {
     }
 
     public void generateToken(String username, String password) throws IOException, InterruptedException {
-        Map<Object, Object> data = new HashMap<>();
-        data.put("username", username);
-        data.put("password", password);
+        String form = "grant_type=password&username=" + username + "&password=" + password;
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/token"))
                 .header("Content-Type", "application/x-www-form-urlencoded")
-                .POST(HttpRequest.BodyPublishers.ofString("username=" + username + "&password=" + password))
+                .POST(HttpRequest.BodyPublishers.ofString(form))
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -50,7 +48,7 @@ public class ApiClient {
 
     public String getCurrentUserDetails() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/account/current"))
+                .uri(URI.create(baseUrl + "/api/account/current"))
                 .header("Accept", "application/json")
                 .header("Authorization", "bearer " + this.token)
                 .GET()
@@ -62,7 +60,7 @@ public class ApiClient {
 
     public String validateDocument(int documentId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/flow/validate/" + documentId))
+                .uri(URI.create(baseUrl + "/api/flow/validate/" + documentId))
                 .header("Authorization", "bearer " + this.token)
                 .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
@@ -73,7 +71,7 @@ public class ApiClient {
 
     public String refuseDocument(int documentId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/flow/refuse/" + documentId))
+                .uri(URI.create(baseUrl + "/api/flow/refuse/" + documentId))
                 .header("Authorization", "bearer " + this.token)
                 .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
@@ -84,7 +82,7 @@ public class ApiClient {
 
     public Document getDocumentData(int documentId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/document/" + documentId + "/metadata"))
+                .uri(URI.create(baseUrl + "/api/document/" + documentId + "/metadata"))
                 .header("Accept", "application/json")
                 .header("Authorization", "bearer " + this.token)
                 .GET()
@@ -96,7 +94,7 @@ public class ApiClient {
 
     public byte[] getDocumentPdf(int documentId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/document/" + documentId + "/display"))
+                .uri(URI.create(baseUrl + "/api/document/" + documentId + "/display"))
                 .header("Accept", "application/json")
                 .header("Authorization", "bearer " + this.token)
                 .GET()
