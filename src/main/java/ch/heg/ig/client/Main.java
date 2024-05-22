@@ -52,7 +52,7 @@ public class Main {
 
             // Get the document data
             Document document = apiClient.getDocumentData(715);
-            //System.out.println("Document Author: " + document.getAuthor());
+            // System.out.println("Document Author: " + document.getAuthor());
 
             // Get the document as a PDF byte array
             byte[] pdfBytes = apiClient.getDocumentPdf(715);
