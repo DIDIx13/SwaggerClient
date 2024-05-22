@@ -18,7 +18,7 @@ public class Main {
             System.out.println("2. sophie.respachat");
             System.out.println("3. sophie.rh");
             System.out.print("Enter choice: ");
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice = getIntInput(scanner);
 
             String username = "";
             String password = "";
@@ -46,29 +46,29 @@ public class Main {
             System.out.println("Token generated successfully!");
 
             while (true) {
-                // Menu de sélection d'action
-                System.out.println("\nSelect action:");
-                System.out.println("1. Get current user details");
-                System.out.println("2. Get document data");
-                System.out.println("3. Get document PDF");
-                System.out.println("4. Validate document");
-                System.out.println("5. Refuse document");
-                System.out.println("6. Exit");
-                System.out.print("Enter choice: ");
-                int actionChoice = Integer.parseInt(scanner.nextLine());
-
-                if (actionChoice == 6) {
-                    System.out.println("Exiting.");
-                    break;
-                }
-
-                int documentId = 0;
-                if (actionChoice > 1 && actionChoice <= 5) {
-                    System.out.print("Enter document ID: ");
-                    documentId = Integer.parseInt(scanner.nextLine());
-                }
-
                 try {
+                    // Menu de sélection d'action
+                    System.out.println("\nSelect action:");
+                    System.out.println("1. Get current user details");
+                    System.out.println("2. Get document data");
+                    System.out.println("3. Get document PDF");
+                    System.out.println("4. Validate document");
+                    System.out.println("5. Refuse document");
+                    System.out.println("6. Exit");
+                    System.out.print("Enter choice: ");
+                    int actionChoice = getIntInput(scanner);
+
+                    if (actionChoice == 6) {
+                        System.out.println("Exiting.");
+                        break;
+                    }
+
+                    int documentId = 0;
+                    if (actionChoice > 1 && actionChoice <= 5) {
+                        System.out.print("Enter document ID: ");
+                        documentId = getIntInput(scanner);
+                    }
+
                     switch (actionChoice) {
                         case 1:
                             // Get the current user details
@@ -99,14 +99,37 @@ public class Main {
                             System.out.println("Invalid choice. Try again.");
                     }
                 } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
+                    handleException(e);
                 }
             }
 
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            handleException(e);
         } finally {
             scanner.close();
+        }
+    }
+
+    private static int getIntInput(Scanner scanner) {
+        while (true) {
+            try {
+                return Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid input. Please enter a valid number: ");
+            }
+        }
+    }
+
+    private static void handleException(Exception e) {
+        String message = e.getMessage();
+        if (message.contains("access denied")) {
+            System.err.println("Error: Access denied. Please check your credentials and try again.");
+        } else if (message.contains("document data")) {
+            System.err.println("Error: Document not found or access denied. Please check the document ID and try again.");
+        } else if (message.contains("Item not found")) {
+            System.err.println("Error: Document not found. Please check the document ID and try again.");
+        } else {
+            System.err.println("An unexpected error occurred: " + message);
         }
     }
 }
