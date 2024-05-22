@@ -20,7 +20,7 @@ public class Main {
             ApiClient apiClient = new ApiClient(token);
             String userDetails = apiClient.getCurrentUserDetails();
             System.out.println(userDetails);
-            // Autres appels API
+
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }

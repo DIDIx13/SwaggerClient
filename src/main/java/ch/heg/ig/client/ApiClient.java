@@ -7,13 +7,14 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.io.IOException;
-import jackson.databind.ObjectMapper;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ApiClient {
     final private String baseUrl = "http://157.26.83.80:2240/api";
     final private HttpClient client;
     final private String token;
-    private ObjectMapper objectMapper;
+    final private ObjectMapper objectMapper;
 
     public ApiClient(String token) {
         this.client = HttpClient.newHttpClient();
