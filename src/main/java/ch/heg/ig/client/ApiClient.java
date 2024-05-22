@@ -1,6 +1,7 @@
 package ch.heg.ig.client;
 
 import ch.heg.ig.model.Document;
+import ch.heg.ig.model.User;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -9,8 +10,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ApiClient {
     final private String baseUrl = "http://157.26.83.80:2240";
@@ -46,7 +45,7 @@ public class ApiClient {
         }
     }
 
-    public String getCurrentUserDetails() throws IOException, InterruptedException {
+    public User getCurrentUserDetails() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/api/account/current"))
                 .header("Accept", "application/json")
@@ -55,7 +54,10 @@ public class ApiClient {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return response.body();
+        String responseBody = response.body();
+
+        // Désérialiser l'utilisateur
+        return objectMapper.readValue(responseBody, User.class);
     }
 
     public String validateDocument(int documentId) throws IOException, InterruptedException {
@@ -89,8 +91,22 @@ public class ApiClient {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return objectMapper.readValue(response.body(), Document.class);
+        String responseBody = response.body();
+
+        // Afficher la réponse pour le débogage
+        System.out.println("Response status code: " + response.statusCode());
+        System.out.println("Response body: " + responseBody);
+
+        // Vérifier si la réponse est une erreur
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+        if (jsonNode.has("error") || response.statusCode() != 200) {
+            throw new IOException("Error retrieving document data: " + responseBody);
+        }
+
+        // Désérialiser le document si aucune erreur
+        return objectMapper.readValue(responseBody, Document.class);
     }
+
 
     public byte[] getDocumentPdf(int documentId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()

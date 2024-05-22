@@ -1,39 +1,33 @@
 package ch.heg.ig.model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Document {
     private int objectID;
-    private int originalID;
-    private int contentTypeID;
     private String contentType;
     private String creationDate;
     private String author;
     private List<Field> fields;
-    private String attachmentFileName;
 
+    // Constructeur
+    public Document() {}
+
+    public Document(int objectID, String contentType, String creationDate, String author, List<Field> fields) {
+        this.objectID = objectID;
+        this.contentType = contentType;
+        this.creationDate = creationDate;
+        this.author = author;
+        this.fields = fields;
+    }
+
+    // Getters et Setters
     public int getObjectID() {
         return objectID;
     }
 
     public void setObjectID(int objectID) {
         this.objectID = objectID;
-    }
-
-    public int getOriginalID() {
-        return originalID;
-    }
-
-    public void setOriginalID(int originalID) {
-        this.originalID = originalID;
-    }
-
-    public int getContentTypeID() {
-        return contentTypeID;
-    }
-
-    public void setContentTypeID(int contentTypeID) {
-        this.contentTypeID = contentTypeID;
     }
 
     public String getContentType() {
@@ -68,11 +62,34 @@ public class Document {
         this.fields = fields;
     }
 
-    public String getAttachmentFileName() {
-        return attachmentFileName;
+    // toString
+    @Override
+    public String toString() {
+        return "Document{" +
+                "objectID=" + objectID +
+                ", contentType='" + contentType + '\'' +
+                ", creationDate='" + creationDate + '\'' +
+                ", author='" + author + '\'' +
+                ", fields=" + fields +
+                '}';
     }
 
-    public void setAttachmentFileName(String attachmentFileName) {
-        this.attachmentFileName = attachmentFileName;
+    // equals
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Document document = (Document) o;
+        return objectID == document.objectID &&
+                Objects.equals(contentType, document.contentType) &&
+                Objects.equals(creationDate, document.creationDate) &&
+                Objects.equals(author, document.author) &&
+                Objects.equals(fields, document.fields);
+    }
+
+    // hashCode
+    @Override
+    public int hashCode() {
+        return Objects.hash(objectID, contentType, creationDate, author, fields);
     }
 }

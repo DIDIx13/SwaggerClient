@@ -1,6 +1,7 @@
 package ch.heg.ig.client;
 
 import ch.heg.ig.model.Document;
+import ch.heg.ig.model.User;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -71,7 +72,7 @@ public class Main {
                     switch (actionChoice) {
                         case 1:
                             // Get the current user details
-                            String userDetails = apiClient.getCurrentUserDetails();
+                            User userDetails = apiClient.getCurrentUserDetails();
                             System.out.println("User Details: " + userDetails);
                             break;
                         case 2:
