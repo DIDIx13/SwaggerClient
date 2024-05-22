@@ -44,19 +44,63 @@ public class Main {
             apiClient.generateToken(username, password);
             System.out.println("Token generated successfully!");
 
-            // Appels API après génération du token
+            while (true) {
+                // Menu de sélection d'action
+                System.out.println("\nSelect action:");
+                System.out.println("1. Get current user details");
+                System.out.println("2. Get document data");
+                System.out.println("3. Get document PDF");
+                System.out.println("4. Validate document");
+                System.out.println("5. Refuse document");
+                System.out.println("6. Exit");
+                System.out.print("Enter choice: ");
+                int actionChoice = Integer.parseInt(scanner.nextLine());
 
-            // Get the current user details
-            String userDetails = apiClient.getCurrentUserDetails();
-            System.out.println("User Details: " + userDetails);
+                if (actionChoice == 6) {
+                    System.out.println("Exiting.");
+                    break;
+                }
 
-            // Get the document data
-            Document document = apiClient.getDocumentData(715);
-            // System.out.println("Document Author: " + document.getAuthor());
+                int documentId = 0;
+                if (actionChoice > 1 && actionChoice <= 5) {
+                    System.out.print("Enter document ID: ");
+                    documentId = Integer.parseInt(scanner.nextLine());
+                }
 
-            // Get the document as a PDF byte array
-            byte[] pdfBytes = apiClient.getDocumentPdf(715);
-            System.out.println("PDF Size: " + pdfBytes.length);
+                try {
+                    switch (actionChoice) {
+                        case 1:
+                            // Get the current user details
+                            String userDetails = apiClient.getCurrentUserDetails();
+                            System.out.println("User Details: " + userDetails);
+                            break;
+                        case 2:
+                            // Get the document data
+                            Document document = apiClient.getDocumentData(documentId);
+                            System.out.println("Document Author: " + document.getAuthor());
+                            break;
+                        case 3:
+                            // Get the document as a PDF byte array
+                            byte[] pdfBytes = apiClient.getDocumentPdf(documentId);
+                            System.out.println("PDF Size: " + pdfBytes.length);
+                            break;
+                        case 4:
+                            // Validate the document
+                            String validateResponse = apiClient.validateDocument(documentId);
+                            System.out.println("Validate Response: " + validateResponse);
+                            break;
+                        case 5:
+                            // Refuse the document
+                            String refuseResponse = apiClient.refuseDocument(documentId);
+                            System.out.println("Refuse Response: " + refuseResponse);
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Try again.");
+                    }
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
