@@ -1,28 +1,67 @@
 package ch.heg.ig.client;
 
+import ch.heg.ig.model.Document;
+
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Admin token
-        // final String token = "yVjpJsBe3ic95NRCKRXLmwbAfL7KZ4VmpaC5iXDcHpnjFVFAbR69-7ftunnW9El49o2AoTeX08r7jZDqJUL9kEgNEGNgI42fFAMkh43p9ViXKAmkbQlLM6T7zfa7GNVhWM5iWGKp-Kh0Ozj6-VCbLx_Iq7ouIEY-n_RSzHI1-HIMYi4zBWa68bWkKdgFZhKgIxaTbquB5x4UucSC5ggZU_Vr4ZBrrMYlxctngQII_RM7FzMgpvtHrqGlSXM3iOBwoBusq6iCeuNyc8uLxeNO1VnOmc-3ZiNyt0TH4NAlYVEYuY4Q4BIThcoNVEta-mz9cXcFs2TuhBVt9ZaVXSinsxgRRuIXWXOIIcKqP9UDJACoh1BY0iC2cP_jMr9U2Dst";
-
-        // Resp Achat token
-        final String token = "OaBwmnJYmwP3OM69m9KorVu7BJNFPhe7YnJQ5YC_J1P_ZPBYJ4zmKyTPlGFG7lA_X_Eusden6TDpwALVH1_fQxQ4O2nj7QhEjlx-CJUoUg9rHczFxLFaXG86Xcv6W1zNZz98xIjXcOvO5iSGsTRdoPI20kgJ7kw-dlljuLV6baNc9YnmrmnXdGlzlvsEhsOq7xw1elZUQN_jwTV-W831o8qcvuQb_LKBmKOV1QNZ2hPWtYoreB70Nzt1xoTEJT55boqCCCDxMZ4PrY3ju4WEJb-2RkrX-eMOqQw98Zc012YQ0JChzp8-MXguQc5mZFtgq9YIdrWyid3zKU0HNvn-UZogbGM-YtaiSP_eJwzdfn2janIp6HAFrI5-eVL6rz61";
-
-        // Secretaire token
-        // final String token = "";
-
-        // Collaborateur token
-        // final String token = "9tHM6rFQL_HW-unz4qUSbOLg4jbi8B39YYGysLkbj9kZ6mfHJzrOPWUk5_GBKmR-q4f1Uf6gUusVVWMiOIJ9-W0Tgtdw3c_2UcFJj_n0qkqKophh6nySKOiSSxCZFtcTatpV2xp1kzT39X8_vdDOpd9DZJjP0S-HCZVx5feMEX2oqYWG5yH6txZzUBQM5gMQYGtgYNP7BaLMGqA1GJa6XFgbgtsNyrUbk3hsgTFnnQkmgxDnoZ-v7zZ9_dNUXKZT6hWMaqpRTuFVk6YXvXT1W_I7hoqcnWoXNArV0IfpH-Nr7oe2Mkqc7CU6MyBTZ2svKfij8dfX8H1J5E6qSDsg0AQ9r8ZiZh82VOoFzOGiO89atOt_4FM09ZBtS7iT7yuM";
+        ApiClient apiClient = new ApiClient();
+        Scanner scanner = new Scanner(System.in);
 
         try {
-            ApiClient apiClient = new ApiClient(token);
+            // Menu de sélection de compte pour le débogage
+            System.out.println("Select account to use:");
+            System.out.println("1. admin.24g1");
+            System.out.println("2. sophie.respachat");
+            System.out.println("3. sophie.rh");
+            System.out.print("Enter choice: ");
+            int choice = Integer.parseInt(scanner.nextLine());
+
+            String username = "";
+            String password = "";
+
+            switch (choice) {
+                case 1:
+                    username = "admin.24g1";
+                    password = "14291215410180203107204541779216928182107183129445";
+                    break;
+                case 2:
+                    username = "sophie.respachat";
+                    password = "2214168391011018575218174572392097019224510826672";
+                    break;
+                case 3:
+                    username = "sophie.rh";
+                    password = "142104190962072521710890237244144197679511625125059174";
+                    break;
+                default:
+                    System.out.println("Invalid choice. Exiting.");
+                    System.exit(0);
+            }
+
+            // Générer le token
+            apiClient.generateToken(username, password);
+            System.out.println("Token generated successfully!");
+
+            // Appels API après génération du token
+
+            // Get the current user details
             String userDetails = apiClient.getCurrentUserDetails();
-            System.out.println(userDetails);
+            System.out.println("User Details: " + userDetails);
+
+            // Get the document data
+            Document document = apiClient.getDocumentData(715);
+            //System.out.println("Document Author: " + document.getAuthor());
+
+            // Get the document as a PDF byte array
+            byte[] pdfBytes = apiClient.getDocumentPdf(715);
+            System.out.println("PDF Size: " + pdfBytes.length);
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            scanner.close();
         }
     }
 }
