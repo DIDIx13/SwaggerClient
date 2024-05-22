@@ -1,14 +1,23 @@
 package ch.heg.ig.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.Objects;
 
 public class User {
+    @JsonProperty("Id")
     private int id;
+    @JsonProperty("Login")
     private String login;
+    @JsonProperty("Name")
     private String name;
+    @JsonProperty("Surname")
     private String surname;
+    @JsonProperty("Email")
     private String email;
+    @JsonProperty("Roles")
     private List<Role> roles;
 
     // Constructeur
