@@ -1,6 +1,8 @@
 package ch.heg.ig.client;
 
+import ch.heg.ig.model.AdvancedSearchRequest;
 import ch.heg.ig.model.Document;
+import ch.heg.ig.model.SearchResult;
 import ch.heg.ig.model.User;
 
 import java.io.IOException;
@@ -8,7 +10,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ApiClient {
@@ -37,7 +41,7 @@ public class ApiClient {
         }
 
         String responseBody = response.body();
-        token = new ObjectMapper().readTree(responseBody).get("access_token").asText();
+        token = objectMapper.readTree(responseBody).get("access_token").asText();
     }
 
     public User getCurrentUserDetails() throws IOException, InterruptedException {
@@ -97,5 +101,27 @@ public class ApiClient {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
+    }
+
+    public List<SearchResult> performAdvancedSearch(String searchPattern, String contentTypeIDs) throws IOException, InterruptedException {
+        AdvancedSearchRequest searchRequest = new AdvancedSearchRequest();
+        searchRequest.setSearchPattern(searchPattern);
+        searchRequest.setContentTypeIDs(contentTypeIDs);
+
+        String requestBody = objectMapper.writeValueAsString(searchRequest);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + "/api/search/advanced"))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            throw new IOException("Failed to perform advanced search, response: " + response.body());
+        }
+
+        return objectMapper.readValue(response.body(), new TypeReference<List<SearchResult>>() {});
     }
 }
