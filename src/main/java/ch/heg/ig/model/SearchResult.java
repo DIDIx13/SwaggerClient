@@ -1,7 +1,11 @@
 package ch.heg.ig.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchResult {
     @JsonProperty("ObjectID")
     private int objectId;
@@ -20,6 +24,9 @@ public class SearchResult {
 
     @JsonProperty("IsLastVersion")
     private boolean isLastVersion;
+
+    @JsonProperty("Fields")
+    private List<Field> fields;
 
     // Getters and setters
 
@@ -71,6 +78,14 @@ public class SearchResult {
         isLastVersion = lastVersion;
     }
 
+    public List<Field> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<Field> fields) {
+        this.fields = fields;
+    }
+
     @Override
     public String toString() {
         return "SearchResult{" +
@@ -80,6 +95,7 @@ public class SearchResult {
                 ", author='" + author + '\'' +
                 ", creationDate='" + creationDate + '\'' +
                 ", isLastVersion=" + isLastVersion +
+                ", fields=" + fields +
                 '}';
     }
 }

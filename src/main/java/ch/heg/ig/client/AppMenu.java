@@ -10,7 +10,6 @@ import java.util.List;
 public class AppMenu {
     private final ApiClient apiClient;
     private final UserInteraction userInteraction;
-    int documentId = 0;
 
     public AppMenu(ApiClient apiClient, UserInteraction userInteraction) {
         this.apiClient = apiClient;
@@ -52,7 +51,7 @@ public class AppMenu {
                 break;
             case 2:
                 // Get the document data
-                documentId = userInteraction.getIntInput("Enter document ID: ");
+                int documentId = userInteraction.getIntInput("Enter document ID: ");
                 Document document = apiClient.getDocumentData(documentId);
                 System.out.println("Document Author: " + document.getAuthor());
                 break;
@@ -86,8 +85,9 @@ public class AppMenu {
     private void handleAdvancedSearch() throws IOException, InterruptedException {
         String searchPattern = userInteraction.getStringInput("Enter search pattern: ");
         String contentTypeIDs = userInteraction.getStringInput("Enter content type IDs (comma separated): ");
+        boolean searchAllVersions = userInteraction.getStringInput("Search all versions? (yes/no): ").equalsIgnoreCase("yes");
 
-        List<SearchResult> results = apiClient.performAdvancedSearch(searchPattern, contentTypeIDs);
+        List<SearchResult> results = apiClient.performAdvancedSearch(searchPattern, contentTypeIDs, searchAllVersions);
         System.out.println("Search Results: ");
         for (SearchResult result : results) {
             System.out.println(result);

@@ -9,7 +9,11 @@ public class AdvancedSearchRequest {
     @JsonProperty("contentTypeIDs")
     private String contentTypeIDs;
 
+    @JsonProperty("searchAllVersions")
+    private boolean searchAllVersions;
+
     // Getters and setters
+
     public String getSearchPattern() {
         return searchPattern;
     }
@@ -24,5 +28,13 @@ public class AdvancedSearchRequest {
 
     public void setContentTypeIDs(String contentTypeIDs) {
         this.contentTypeIDs = contentTypeIDs;
+    }
+
+    public boolean isSearchAllVersions() {
+        return searchAllVersions;
+    }
+
+    public void setSearchAllVersions(boolean searchAllVersions) {
+        this.searchAllVersions = searchAllVersions;
     }
 }

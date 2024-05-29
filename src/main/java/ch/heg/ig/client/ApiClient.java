@@ -103,10 +103,11 @@ public class ApiClient {
         return response.body();
     }
 
-    public List<SearchResult> performAdvancedSearch(String searchPattern, String contentTypeIDs) throws IOException, InterruptedException {
+    public List<SearchResult> performAdvancedSearch(String searchPattern, String contentTypeIDs, boolean searchAllVersions) throws IOException, InterruptedException {
         AdvancedSearchRequest searchRequest = new AdvancedSearchRequest();
         searchRequest.setSearchPattern(searchPattern);
         searchRequest.setContentTypeIDs(contentTypeIDs);
+        searchRequest.setSearchAllVersions(searchAllVersions);
 
         String requestBody = objectMapper.writeValueAsString(searchRequest);
 
